@@ -36,10 +36,8 @@ CREATE TABLE dbo.Products (
 );
 
 ALTER TABLE OrderDetails
-    ADD CONSTRAINT fk_OrderId FOREIGN key (OrderId) REFERENCES Orders(OrderId)
-    
-    
-    
+    ADD CONSTRAINT fk_ProductId FOREIGN key (ProductId) REFERENCES Products(ProductId)
+       
     
     
 INSERT INTO Orders VALUES (1, CONVERT(datetime, '20191020', 112), 'John' );
@@ -51,3 +49,39 @@ INSERT INTO OrderDetails VALUES (1, 1, 2);
 INSERT INTO OrderDetails VALUES (1, 2, 3);
 INSERT INTO OrderDetails VALUES (2, 2, 1);
 INSERT INTO OrderDetails VALUES (2, 3, 2);
+
+
+CREATE VIEW Sales
+AS SELECT Orders.OrderID, 
+          SUM(OrderDetails.Quantity * Products.Price) AS TotalCost
+   FROM OrderDetails, 
+        Products, 
+        Orders
+   WHERE Orders.OrderID = OrderDetails.OrderID AND 
+         OrderDetails.ProductID = Products.ProductID
+   GROUP BY Orders.OrderID;
+GO
+
+CREATE TRIGGER ChangeStock ON OrderDetails
+AFTER INSERT
+AS 
+BEGIN
+  IF UPDATE (Quantity)
+  BEGIN
+     UPDATE Products
+        SET Products.Quantity = Products.Quantity - inserted.Quantity
+       FROM inserted
+      WHERE Products.ProductID = inserted.ProductID
+  END
+END;
+
+GO
+
+CREATE PROCEDURE FindProduct(@ProductID AS INT) AS
+BEGIN
+  SELECT Product_Details, Price, Quantity
+    FROM Products
+   WHERE ProductID = @ProductID
+END;
+
+GO
