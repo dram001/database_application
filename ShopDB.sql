@@ -1,4 +1,4 @@
-IF OBJECT_ID(N 'dbo.Orders', N 'U') IS NOT NULL 
+IF OBJECT_ID('dbo.Orders', 'U') IS NOT NULL 
    DROP TABLE dbo.Orders;
 
 CREATE TABLE dbo.Orders (
@@ -8,7 +8,7 @@ CREATE TABLE dbo.Orders (
   CONSTRAINT pk_Orders PRIMARY KEY (OrderID)
 ) 
 
-IF OBJECT_ID(N 'dbo.OrderDetails', N 'U') IS NOT NULL 
+IF OBJECT_ID('dbo.OrderDetails', 'U') IS NOT NULL 
    DROP TABLE dbo.OrderDetails;
 
 CREATE TABLE dbo.OrderDetails (
@@ -24,7 +24,7 @@ ALTER TABLE OrderDetails
     
     
     
-IF OBJECT_ID(N'dbo.Products', N'U') IS NOT NULL 
+IF OBJECT_ID('dbo.Products', 'U') IS NOT NULL 
    DROP TABLE dbo.Products;
 
 CREATE TABLE dbo.Products (
